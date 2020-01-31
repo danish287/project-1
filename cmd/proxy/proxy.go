@@ -6,50 +6,55 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"os"
-)
-
-var (
-	aPort  string
-	bPort  string
-	cPort  string
-	myHost string
 )
 
 func main() {
-	//getEnvVariables()
 	runProxy()
 }
 
 func runProxy() {
-	fmt.Println("Hi")
 	//parse the url
 	myURL, err := url.Parse("http://localhost:8080")
-	//myHttps, _ := url.Parse("https://localhost")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 	//initiate the reverse proxy
 	proxy := httputil.NewSingleHostReverseProxy(myURL)
-	//proxy2 := httputil.NewSingleHostReverseProxy(myHttps)
-	//listen on given port
-	//go http.ListenAndServeTLS(":443", "cert.pem", "key.pem", proxy)
+
+	fmt.Println("Server is running on port 443")
+
+	//listen on given ports
 	err = http.ListenAndServeTLS(":443", "cert.pem", "key.pem", proxy)
-	//err = http.ListenAndServe(":80", proxy2)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	//myHttps, _ := url.Parse("https://localhost")
+	//proxy2 := httputil.NewSingleHostReverseProxy(myHttps)
+	//go http.ListenAndServeTLS(":443", "cert.pem", "key.pem", proxy)
+	//err = http.ListenAndServe(":80", proxy2)
 }
 
-func DirectProxy() {
-	fmt.Println("Hi")
-}
+//getPort checks if there are any avaiable ports to run our server on from the three ports we want to distrubute to, else logs error that there are no avilable servers
+// func getPort() string {
 
-//getEnvVariables gets the environment variables for 3 ports and the host URL
-func getEnvVariables() {
-	aPort = os.Getenv("PORT_A")
-	bPort = os.Getenv("PORT_B")
-	cPort = os.Getenv("PORT_C")
-	myHost = os.Getenv("MY_URL")
-}
+// 	conn, err := net.Listen("tcp", aPort)
+// 	if err == nil {
+// 		conn.Close()
+// 		return aPort
+// 	}
+// 	conn, err = net.Listen("tcp", bPort)
+// 	if err == nil {
+// 		conn.Close()
+// 		return bPort
+// 	}
+
+// 	conn, err = net.Listen("tcp", cPort)
+// 	if err == nil {
+// 		conn.Close()
+// 		return cPort
+// 	}
+
+// 	return "No avialble ports"
+// }
