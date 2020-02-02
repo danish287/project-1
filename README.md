@@ -1,8 +1,8 @@
 ## Features
 - [X] Secure Reverse Proxy
-- Firewall
-- Intrusion Detection System
-- Logging Manager
+- [ ] Firewall
+- [ ] Intrusion Detection System
+- [ ] Logging Manager
 - [ ] Load Balancer
 
 - [ ] Documentation
