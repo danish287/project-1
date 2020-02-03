@@ -30,31 +30,4 @@ func runProxy() {
 		log.Fatal(err)
 	}
 
-	//myHttps, _ := url.Parse("https://localhost")
-	//proxy2 := httputil.NewSingleHostReverseProxy(myHttps)
-	//go http.ListenAndServeTLS(":443", "cert.pem", "key.pem", proxy)
-	//err = http.ListenAndServe(":80", proxy2)
 }
-
-//getPort checks if there are any avaiable ports to run our server on from the three ports we want to distrubute to, else logs error that there are no avilable servers
-// func getPort() string {
-
-// 	conn, err := net.Listen("tcp", aPort)
-// 	if err == nil {
-// 		conn.Close()
-// 		return aPort
-// 	}
-// 	conn, err = net.Listen("tcp", bPort)
-// 	if err == nil {
-// 		conn.Close()
-// 		return bPort
-// 	}
-
-// 	conn, err = net.Listen("tcp", cPort)
-// 	if err == nil {
-// 		conn.Close()
-// 		return cPort
-// 	}
-
-// 	return "No avialble ports"
-// }
