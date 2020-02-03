@@ -1,62 +1,31 @@
 package config
 
 import (
-	"encoding/json"
 	"flag"
-	"log"
-	"os"
+	"strings"
+	"time"
 )
 
-//ZodiacSign stores name of zodiac
-var ZodiacSign string
+//UserSunsign stores zodiac sign of user based on date of birth using the 12 traditionally defined zodiac signs
+var UserSunsign string
 
-//ReadingType stores type of reading user is looking get
-var ReadingType string
+//RequestedDate stores time of the requested reading. Values: today, week, month, and year
+var RequestedDate string
 
-//ReadingFor specifies when the reader wants the reading
-var ReadingFor string
+//UserName contains the name of the user to store horoscope
+var UserName string
 
-//CONFIGFILE stores the links where we get horoscopes
-const CONFIGFILE string = "conf.json"
+//StoreHoroscope is a string refering to weather we will store the user's given horoscope or not
+var StoreHoroscope string
 
-//const CONFIGFILE string = "../../conf.json"
-
-//MyURL stores the URL we are trying to get
-var MyURL string
-
-//LinkCluster derives Links from json file
-type LinkCluster struct {
-	General []string
-	Love    []string
-	Career  []string
-	Money   []string
-}
-
-//ZodiacCluster derives links from json file
-type ZodiacCluster struct {
-	Zodiac   string
-	Readings []LinkCluster
-}
-
-//Configuration derives links from json file
-type Configuration struct {
-	Links []ZodiacCluster
-}
-
-var ConfigMe Configuration
+//FileName stores the the name of the file based on user input to save if user would like to save a horoscope in a text file
+var FileName string
 
 func init() {
-
-	myLink, err := os.Open(CONFIGFILE)
-	json.NewDecoder(myLink).Decode(&ConfigMe)
-
-	if err != nil {
-
-		log.Fatal(err)
-	}
-	flag.StringVar(&ZodiacSign, "ZodiacSign", "EMPTY", "name of the zodiac sign")
-	flag.StringVar(&ReadingFor, "ChooseReading", "daily", "time period of reading")
-	flag.StringVar(&ReadingType, "ChooseType", "general", "type of reading")
+	flag.StringVar(&UserSunsign, "s", "", "User's sunsign")
+	flag.StringVar(&RequestedDate, "date", "today", "Time for requested reading.\n   Values: Today, Week, Month, and Year")
 	flag.Parse()
 
+	currentTime := strings.Split(time.Now().String(), " ")[0]
+	FileName = strings.ToLower(UserSunsign) + strings.Title(RequestedDate) + currentTime
 }

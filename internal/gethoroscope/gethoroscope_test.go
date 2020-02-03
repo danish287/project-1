@@ -51,7 +51,7 @@ func TestValidYearlyResponse(t *testing.T) {
 
 func TestInvalidSunsign(t *testing.T) {
 	invalidArgs := GetHoroscope("invalidSunSign", "today")
-	isError := strings.Contains(invalidArgs, "Please try again using a valid date. Refer to example below.")
+	isError := strings.Contains(invalidArgs, "Please try again using a valid sunsign")
 	if !isError {
 		t.Error("TEST FAILED: invalid sunsign")
 	}
@@ -60,6 +60,7 @@ func TestInvalidSunsign(t *testing.T) {
 func TestInvalidDate(t *testing.T) {
 	invalidArgs := GetHoroscope("libra", "nowhere")
 	isError := strings.Contains(invalidArgs, "Please try again using a valid date")
+
 	if !isError {
 		t.Error("TEST FAILED: invalid date")
 	}

@@ -11,9 +11,6 @@ import (
 //ConfHoroscope stores requested horoscope type as a string after configuration
 var ConfHoroscope string
 
-//ValidSunsign stores a bool referrring to weather the user inout for sunsign is a valid argument
-var ValidSunsign = true
-
 //NumToMonth stores month numeric references as keys and month names as values corresponding to their numeric equivalent
 var NumToMonth = map[string]string{
 	"01": "January",
@@ -71,9 +68,9 @@ func GetHoroscope(userSunsign string, dateInput string) string {
 
 	body, err := ioutil.ReadAll(response.Body)
 	defer response.Body.Close()
-	invalidArg := strings.Contains(string(body), "<title>404 Not Found</title>")
+	invalidDate := strings.Contains(string(body), "<title>404 Not Found</title>")
 
-	if invalidArg {
+	if invalidDate {
 		return "\nPlease try again using a valid date. Refer to example below.\n./horoscope -s='Libra' -date='today'"
 	}
 
@@ -92,7 +89,7 @@ func GetHoroscope(userSunsign string, dateInput string) string {
 	}
 
 	if len(ConfHoroscope) == 0 {
-		return "\nPlease try again using a valid date. Refer to example below.\n./horoscope -s='Libra' -date='today'"
+		return "\nPlease try again using a valid sunsign. Refer to example below.\n./horoscope -s='Libra' -date='today'"
 	}
 
 	return ConfHoroscope
@@ -113,8 +110,8 @@ func GetDailyHoroscope(jsonStruct []byte) string {
 	}
 
 	retDate := strings.Split(UserHoroscope.Date, "-")
-	fullDate := "Reading for the Day of " + NumToMonth[retDate[1]] + " " + retDate[2] + ", " + retDate[0]
-	ConfHoroscope = "Hi, " + UserHoroscope.Sunsign + "!" + "\n" + fullDate + "\n\n" + UserHoroscope.Horoscope
+	fullDate := "Here is your reading for the Day of " + NumToMonth[retDate[1]] + " " + retDate[2] + ", " + retDate[0]
+	ConfHoroscope = "Hi, " + UserHoroscope.Sunsign + "!" + "\n" + fullDate + "\n" + UserHoroscope.Horoscope
 	return ConfHoroscope
 
 }
@@ -134,8 +131,8 @@ func GetWeeklyHoroscope(jsonStruct []byte) string {
 	}
 
 	retDate := strings.Split(UserHoroscope.Week, "-")
-	fullDate := "Reading for the Week of " + NumToMonth[retDate[1]] + " " + retDate[0] + ", " + retDate[2] + "to " + NumToMonth[retDate[4]] + " " + retDate[3] + ", " + retDate[5]
-	ConfHoroscope = "Hi, " + UserHoroscope.Sunsign + "!" + "\n" + fullDate + "\n\n" + UserHoroscope.Horoscope
+	fullDate := "Here is your reading for the Week of " + NumToMonth[retDate[1]] + " " + retDate[0] + ", " + retDate[2] + "to " + NumToMonth[retDate[4]] + " " + retDate[3] + ", " + retDate[5]
+	ConfHoroscope = "Hi, " + UserHoroscope.Sunsign + "!" + "\n" + fullDate + "\n" + UserHoroscope.Horoscope
 
 	return ConfHoroscope
 }
@@ -170,10 +167,10 @@ func GetMonthlyHoroscope(jsonStruct []byte) string {
 	}
 
 	retDate := strings.Split(UserHoroscope.Month, " ")
-	fullDate := "Reading for the Month of " + monthAbbrv[retDate[0]] + " " + retDate[1]
+	fullDate := "Here is your reading for the Month of " + monthAbbrv[retDate[0]] + " " + retDate[1]
 	horoLen := len(UserHoroscope.Horoscope) - 2
 	UserHoroscope.Horoscope = UserHoroscope.Horoscope[2:horoLen]
-	ConfHoroscope = "Hi, " + UserHoroscope.Sunsign + "!" + "\n" + fullDate + "\n\n" + UserHoroscope.Horoscope
+	ConfHoroscope = "Hi, " + UserHoroscope.Sunsign + "!" + "\n" + fullDate + "\n" + UserHoroscope.Horoscope
 	return ConfHoroscope
 
 }
@@ -192,7 +189,7 @@ func GetYearlyHoroscope(jsonStruct []byte) string {
 		return ConfHoroscope
 	}
 
-	fullDate := "Reading for the Year " + UserHoroscope.Year
-	ConfHoroscope = "Hi, " + UserHoroscope.Sunsign + "!" + "\n" + fullDate + "\n\n" + UserHoroscope.Horoscope
+	fullDate := "Here is your reading for the Year " + UserHoroscope.Year
+	ConfHoroscope = "Hi, " + UserHoroscope.Sunsign + "!" + "\n" + fullDate + "\n" + UserHoroscope.Horoscope
 	return ConfHoroscope
 }
