@@ -1,51 +1,35 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-type CLIHoroscopes struct {
+//UsrLogin stores the name, email, and password for user authentication
+type UsrLogin struct {
 	gorm.Model
-	Name      string
-	Horoscope []usrHoroscopes
+	Name     string
+	Email    string
+	Password string
 }
 
-var usrHoroscopes string
-
-func AddHorosocpe(userName string, usrHoroscope string) {
+//AddsUser adds a user (name, email, and password) to database for user authertication
+func AddUser(userName string, usrEmail string, usrPassword string) {
 	//returns DB object, specify the type of DB and the DB file
 	db, err := gorm.Open("sqlite3", "myDB.db")
-	var s []string
-	s = append(s, usrHoroscope)
-	fmt.Printf("%T", s)
+	defer db.Close()
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	defer db.Close()
-
 	//Migrate the schema
-	db.AutoMigrate(&CLIHoroscopes{})
-	// db.Where()
-	// Create
-	db.Create(&CLIHoroscopes{Name: userName, Horoscope: {usrHoroscopes: usrHoroscope}})
-
-	// Read
-	var horos CLIHoroscopes
-
-	db.First(&horos, 1)                   // find product with id 1
-	db.First(&horos, "name = ?", "dania") // find product with code l1212
-
-	// // Update - update product's price to 2000
-	db.Model(&horos).Update("Name", "logan")
-
+	db.AutoMigrate(&UsrLogin{})
+	db.Create(&UsrLogin{Name: userName, Email: usrEmail, Password: usrPassword})
 }
 
 func main() {
-	AddHorosocpe("dania", "test")
+	AddUser("dania", "test", "test")
 }

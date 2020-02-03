@@ -12,7 +12,7 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("web")))
 
 	http.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
-		var usrSunsign = r.FormValue("sunsign")
+		var usrSunsign = r.FormValue("mySunsign")
 		var reqDate = r.FormValue("date")
 		reqHoroscope := gethoroscope.GetHoroscope(usrSunsign, reqDate)
 

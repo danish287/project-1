@@ -6,7 +6,7 @@ import (
 
 	"github.com/danish287/project-1/config"
 	"github.com/danish287/project-1/internal/gethoroscope"
-	"github.com/danish287/project-1/savefile"
+	"github.com/danish287/project-1/internal/savefile"
 )
 
 func main() {
