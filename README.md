@@ -1,7 +1,7 @@
 ## Features
 - [X] Secure Reverse Proxy using HTTPS.
 - [ ] Firewall
-- [ ] Intrusion Detection System
+- [X] Intrusion Detection System
 - [ ] Logging Manager
 - [ ] Load Balancer
 
