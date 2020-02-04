@@ -9,14 +9,7 @@
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-      <script> 
-         function onlyOne(checkbox) {
-             var checkboxes = document.getElementsByName('mySunsign')
-             checkboxes.forEach((item) => {
-                 if (item !== checkbox) item.checked = false
-             })
-         }
-      </script>   
+  
    </head>
    <body>
       <h2>Login to View Your Horoscope</h2>
@@ -24,9 +17,9 @@
       <button data-toggle="collapse" data-target="#login" >Login</button> 
     
       <div id="signup" class="collapse">
-         <form action="/welcome" method="POST" >
+         <form action="signup" method="POST" >
             <div class="form-group">
-               <label for="usrName">Your name</label>
+               <label for="usrName" >Your name</label>
                <input type="text" class="form-control" id="usrName" placeholder="Enter your name" name="myName">
             </div>
             <div class="form-group">
@@ -37,36 +30,37 @@
                <label for="usrPassword">Password</label>
                <input type="password" class="form-control" id="usrPassword" placeholder="Password" name="myPassword">
             </div>
-            <select class="form-control">
-               <option name="mySunsign">Aries</option>
-               <option name="mySunsign">Default select</option>
-               <option name="mySunsign">Default select</option>
-               <option name="mySunsign">Default select</option>
-               <option name="mySunsign">Default select</option>
-               <option name="mySunsign">Default select</optionname="mySunsign">
-               <option name="mySunsign">Default select</option>
-               <option name="mySunsign">Default select</option>
-               <option name="mySunsign">Default select</option>
-               <option name="mySunsign">Default select</option>
-               <option name="mySunsign">Default select</option>
-               <option name="mySunsign">Default select</option>
+            <select class="form-control" name="mySunsign">
+               <option value="Aries">Aries</option>
+               <option value="Leo">Leo</option>
+               <option value="Cancer">Cancer</option>
+               <option value="Pisces">Pisces</option>
+               <option value="Scorpio">Scorpio</option>
+               <option value="Taurus">Taurus</option>
+               <option value="Sagittarius">Sagittarius</option>
+               <option value="Gemini">Gemini</option>
+               <option value="Virgo">Virgo</option>
+               <option value="Libra">Libra</option>
+               <option value="Capricorn">Capricorn</option>
+               <option value="Aquarius">Aquarius</option>
             </select>
             <button type="submit" class="btn btn-primary">Submit</button>
          </form>
       </div>
       
-      <div id="login" class="collapse">
-        <div class="form-group">
-            <label for="usrName">Your name</label>
-            <input type="text" class="form-control" id="usrName" placeholder="Enter your name" name="myName">
-         </div>
+      <!-- <div id="login" class="collapse">
+        <form action="login" method="POST" >
          <div class="form-group">
             <label for="usrEmail">Email address</label>
             <input type="email" class="form-control" id="usrEmail" placeholder="Enter email" name="myEmail">
          </div>
+         <div class="form-group">
+            <label for="usrPassword">Your name</label>
+            <input type="text" class="form-control" id="usPassword" placeholder="Enter your name" name="myPassword">
+         </div>
          <button type="submit" class="btn btn-primary">Submit</button>
          </form>
-        </div>
+        </div> -->
     
    </body>
 </html>
