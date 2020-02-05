@@ -122,7 +122,9 @@ Would you like to save this horoscope? (y/n)
 Example Output:
 
 ``` Would you like to save this horoscope as a text file? (y/n) ``` 
+
 ``` y ``` 
+
 ```Your horoscoped has been saved as aquariusYear2020-02-05 under the /savedhoroscopes directory.```  
 
 **Note:** if you type ```n``` + enter this will save the file as a text.
@@ -130,6 +132,7 @@ Example Output:
 Example Output:
 
 ``` Would you like to save this horoscope as a text file? (y/n) ``` 
+
 ``` n ``` 
 
 ### Local Host
