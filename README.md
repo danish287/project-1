@@ -57,7 +57,7 @@ go get -u github.com/jinzhu/gorm
  go get -u -d github.com/danish287/project-1
 
 ```
-### Build CLI
+## Build CLI
 
 From project-1 directory run the following commands:
 
@@ -71,7 +71,7 @@ Execute:
 
 ```
 
-### Flags 
+## Flags 
 
 1. ``` -s ``` allows the user to determine the zodiac sign for the requested horscope. This flag is **mandatory** and without it you will be prompted to include an argument for it.
 
@@ -135,7 +135,7 @@ Example Output:
 
 ``` n ``` 
 
-### Local Host
+## Local Host
 
 ```
  go build cmd/horoscoped/horoscoped.go
@@ -147,7 +147,7 @@ Execute:
 
 ```
 
-### Build Proxy
+## Build Proxy
 
 ```
  go build cmd/proxy/proxy.go
