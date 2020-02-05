@@ -94,10 +94,11 @@ Would you like to save this horoscope? (y/n)
 
 
 2. ``` -date ``` allows the user to determine the date the requested horscope. This flag is optional, and without it the default value is "today". 
->> - today
->> - week
->> - month
->> - year
+> Flag Options:
+> - today
+> - week
+> - month
+> - year
 
  
  ```
