@@ -118,14 +118,17 @@ Would you like to save this horoscope? (y/n)
 ```
 
 **Note:** if you type ```y``` + enter this will save the file as a text.
+
 Example Output:
 
 ``` Would you like to save this horoscope as a text file? (y/n) ``` 
 ``` y ``` 
 ```Your horoscoped has been saved as aquariusYear2020-02-05 under the /savedhoroscopes directory.```  
 
-**Note:** if you type ```n``` + enter this will save the file as a text:
+**Note:** if you type ```n``` + enter this will save the file as a text.
+
 Example Output:
+
 ``` Would you like to save this horoscope as a text file? (y/n) ``` 
 ``` n ``` 
 
@@ -157,7 +160,7 @@ sudo ./proxy
 
 These are instructions on how to run all tests from the project-1 directory.
 
-### Package gethoroscope tests
+### Package gethoroscope Tests
 
 This will test that we are accurately retrieving requested horoscope using the api. Addiitonaly, we tests correct output, promting the user to use valid flag arguments, when the user flag arguments are not valid. 
 
