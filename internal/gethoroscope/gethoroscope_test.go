@@ -1,6 +1,7 @@
 package gethoroscope
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -64,4 +65,10 @@ func TestInvalidDate(t *testing.T) {
 	if !isError {
 		t.Error("TEST FAILED: invalid date")
 	}
+}
+
+func ExampleGetHoroscope() {
+	myHoroscope := GetHoroscope("aries", "today")
+	fmt.Println(myHoroscope)
+	// Output: string of horoscope for the day
 }
