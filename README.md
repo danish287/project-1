@@ -71,7 +71,7 @@ Execute:
 
 ```
 
-## Flags 
+### Flags 
 
 1. ``` -s ``` allows the user to determine the zodiac sign for the requested horscope. This flag is **mandatory** and without it you will be prompted to include an argument for it.
 
