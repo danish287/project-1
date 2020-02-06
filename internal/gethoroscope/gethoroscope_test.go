@@ -70,5 +70,4 @@ func TestInvalidDate(t *testing.T) {
 func ExampleGetHoroscope() {
 	myHoroscope := GetHoroscope("aries", "today")
 	fmt.Println(myHoroscope)
-	// Output: string of horoscope for the day
 }

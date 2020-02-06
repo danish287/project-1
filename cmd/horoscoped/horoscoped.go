@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	println("Server is running on port 8080")
+	println("Server is running on port 8081")
 	http.Handle("/", http.FileServer(http.Dir("web")))
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
@@ -101,7 +101,6 @@ func main() {
 
 			if usrStatus {
 				fmt.Fprintf(w, "Too many failed password attempts. Due to security reasons, your account has been locked until tomororw. Goodbye.")
-				fmt.Println("USERSTATUS")
 			}
 			if isUser {
 				reqHoroscope := gethoroscope.GetHoroscope(myUsr[2], "today")
@@ -121,7 +120,7 @@ func main() {
 
 	})
 
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8081", nil)
 
 	if err != nil {
 		log.Fatal(err)

@@ -21,5 +21,5 @@ func SaveFile(reqHoroscope string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Your horoscoped has been saved as %s under the /savedhoroscopes directory.\n", config.FileName)
+	fmt.Printf("Your horoscoped has been saved as %s under the /savedhoroscopes directory.\n F", config.FileName)
 }

@@ -14,7 +14,7 @@ func main() {
 
 func runProxy() {
 	//parse the url
-	myURL, err := url.Parse("http://localhost:8080")
+	myURL, err := url.Parse("http://localhost:8081")
 
 	if err != nil {
 		log.Fatal(err)

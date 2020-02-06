@@ -34,9 +34,6 @@ func AddUser(userName string, usrEmail string, usrPassword string, usrSunsign st
 	//Migrate the schema
 	db.AutoMigrate(&UsrLogin{})
 	db.Create(&UsrLogin{Name: userName, Email: usrEmail, Password: myHash, Sunsign: usrSunsign, Login: loginAttempts, Blocked: isBlocked})
-	//Migrate the schema
-	// db.AutoMigrate(&UsrLogin{})
-	// db.Create(&UsrLogin{Name: "Dania", Email: "test", Password: myHash, Sunsign: "Aries", Login: 0, Blocked: false})
 
 }
 
