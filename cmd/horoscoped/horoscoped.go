@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"time"
 
 	"github.com/danish287/project-1/internal/dbClient"
 	"github.com/danish287/project-1/internal/gethoroscope"
@@ -11,6 +13,12 @@ import (
 
 func main() {
 	println("Server is running on port 8081")
+	currTime := time.Now()
+	path := "logs/horoscoped/" + currTime.Format("01-02-2006") + ".log"
+	file, _ := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	defer file.Close()
+	log.SetOutput(file)
+
 	http.Handle("/", http.FileServer(http.Dir("web")))
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
@@ -100,17 +108,25 @@ func main() {
 			myUsr := dbClient.FindUsr(dbEmail)
 
 			if usrStatus {
-				fmt.Fprintf(w, "Too many failed password attempts. Due to security reasons, your account has been locked until tomororw. Goodbye.")
-			}
-			if isUser {
-				reqHoroscope := gethoroscope.GetHoroscope(myUsr[2], "today")
-				fmt.Fprintf(w, reqHoroscope)
+
+				yr, month, day := time.Now().Date()
+				myTime := string(yr) + string(month) + string(day)
+				fmt.Fprintf(w, "Too many failed password attempts. Due to security reasons, your account has been locked until tomorrow. Goodbye.")
+				log.Output(0, (myTime + ": " + usrEmail + " - too many failed password attempts"))
 			} else {
-				dbClient.FailedAttempt(dbEmail)
-				if dbClient.IsBlocked(usrEmail) {
-					fmt.Fprintf(w, "Too many failed password attempts. Due to security reasons, your account has been locked until tomororw. Goodbye.")
+				if isUser {
+					reqHoroscope := gethoroscope.GetHoroscope(myUsr[2], "today")
+					fmt.Fprintf(w, reqHoroscope)
 				} else {
-					http.ServeFile(w, r, "./web/index.html")
+					dbClient.FailedAttempt(dbEmail)
+					if dbClient.IsBlocked(usrEmail) {
+						yr, month, day := time.Now().Date()
+						myTime := string(yr) + string(month) + string(day)
+						fmt.Fprintf(w, "Too many failed password attempts. Due to security reasons, your account has been locked until tomorrow. Goodbye.")
+						log.Output(0, (myTime + ": " + usrEmail + " - too many failed password attempts"))
+					} else {
+						http.ServeFile(w, r, "./web/index.html")
+					}
 				}
 			}
 

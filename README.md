@@ -1,7 +1,7 @@
 # Horoscopes Application
 Horoscopes is a command line application written in Go that return's a user's (daily, weekly, monthly, or yearly horoscope) based on user zodiac sign. 
 
-This application is secured expanded, to be used on https://localhost:8080, and secured using a variety of features.
+This application is secured expanded, to be used on port 8081 (http) and port 443 (https), and secured using a variety of features.
 
 ### User Stories Basic Command Line Application
 - [X] User can save requested horoscope as a text file.
@@ -13,7 +13,7 @@ This application is secured expanded, to be used on https://localhost:8080, and 
 ### CLI Application Features 
 - [X] Documentation
 - [X] Unit testing
-- [ ] Logging
+- [X] Logging
 - [X] API Library
 - [X] CLI flags
 - [ ] Environment variables
@@ -23,20 +23,20 @@ This application is secured expanded, to be used on https://localhost:8080, and 
 
 ### Security Features
 - [X] Secure Reverse Proxy (HTTPS)
-- [ ] Firewall
+- [X] Firewall Using iptables
 - [X] Intrusion Detection System
-- [ ] Logging Manager
+- [X] Logging Manager
 - [ ] Load Balancer
 - [X] User Authentication 
 
 ### Also Includes
 - [ ] Documentation
 - [ ] Agile Project Management
-- [ ] Unit Testing
-- [ ] Logs & Metrics
-- [ ] Environment Configuration
-- [ ] Security
-- [ ] Build & Deploy Scripts
+- [X] Unit Testing
+- [X] Logs & Metrics
+- [X] Environment Configuration
+- [X] Security
+- [X] Build & Deploy Scripts
 - [ ] Containerization
 
 ## Getting Started
