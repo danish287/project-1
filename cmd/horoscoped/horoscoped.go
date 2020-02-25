@@ -13,6 +13,8 @@ import (
 
 func main() {
 	println("Server is running on port 8081")
+
+	// logging anything that happens in this file
 	currTime := time.Now()
 	path := "logs/horoscoped/" + currTime.Format("01-02-2006") + ".log"
 	file, _ := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
@@ -20,6 +22,18 @@ func main() {
 	log.SetOutput(file)
 
 	http.Handle("/", http.FileServer(http.Dir("web")))
+
+	// itmpl := template.Must(template.ParseFiles("../../web/sign-in.html"))
+	// tmpl2 := template.Must(template.ParseFiles("web/yearly.html"))
+	// tmpl3 := template.Must(template.ParseFiles("web/monthly.html"))
+
+	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	w.Header().Set("Content-Type", "text/html")
+	// 	data := IndexContent{
+	// 		Horoscopes: gethoroscope.GetAllDailyHoroscope(),
+	// 	}
+	// 	itmpl.Execute(w, data)
+	// })
 
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		var usrEmail = r.FormValue("myEmail")
