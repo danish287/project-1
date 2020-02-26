@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -10,6 +11,18 @@ import (
 	"github.com/danish287/project-1/internal/dbClient"
 	"github.com/danish287/project-1/internal/gethoroscope"
 )
+
+type MainContent struct {
+	Daily   string
+	Monthly string
+	Yearly  string
+	Zodaic  string
+	UsrName string
+}
+
+type Welcome struct {
+	MyName string
+}
 
 func main() {
 	println("Server is running on port 8081")
@@ -21,133 +34,47 @@ func main() {
 	defer file.Close()
 	log.SetOutput(file)
 
-	http.Handle("/", http.FileServer(http.Dir("web")))
+	mtmpl := template.Must(template.ParseFiles("web/main.html"))
 
-	// itmpl := template.Must(template.ParseFiles("../../web/sign-in.html"))
-	// tmpl2 := template.Must(template.ParseFiles("web/yearly.html"))
-	// tmpl3 := template.Must(template.ParseFiles("web/monthly.html"))
-
-	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	w.Header().Set("Content-Type", "text/html")
-	// 	data := IndexContent{
-	// 		Horoscopes: gethoroscope.GetAllDailyHoroscope(),
-	// 	}
-	// 	itmpl.Execute(w, data)
-	// })
-
-	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		var usrEmail = r.FormValue("myEmail")
-		var usrPassword = r.FormValue("myPassword")
-		//reqHoroscope := gethoroscope.GetHoroscope(usrSunsign, reqDate)
-
-		fmt.Fprint(w, "\n\n ", usrEmail, usrPassword)
-		dbEmail := dbClient.FindEmail(usrEmail)
-		if dbEmail == usrEmail {
-			//will redirectback to index page for user to input fields again
-			fmt.Println("Hi")
-			fmt.Println(r.URL.Path)
-			fmt.Println("test")
-			http.ServeFile(w, r, "./web/reject.html")
-		} else {
-			//dbClient.AddUser(usrName, usrEmail, usrPassword, usrSunsign)
-			fmt.Println("ADD USER TO ACCOUNT")
-			http.ServeFile(w, r, "./web/welcome.html")
-
-		}
-
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "web/index.html")
 	})
 
 	http.HandleFunc("/signup", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "web/signup.html")
+	})
 
-		var usrSunsign = r.FormValue("mySunsign")
-		var usrName = r.FormValue("myName")
-		var usrEmail = r.FormValue("myEmail")
-		var usrPassword = r.FormValue("myPassword")
-		answer := usrEmail + " " + usrName + " " + usrPassword + " " + usrSunsign
-		fmt.Println(usrName)
-		//reqHoroscope := gethoroscope.GetHoroscope(usrSunsign, reqDate)
+	http.HandleFunc("/locked", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "web/locked.html")
+	})
 
-		dbEmail := dbClient.FindEmail(usrEmail)
-		if dbEmail == usrEmail {
-			//will redirectback to index page for user to input fields again
-			fmt.Println("Hi")
-			fmt.Println(r.URL.Path)
-			fmt.Println("test")
-			http.ServeFile(w, r, "./web/reject.html")
-		} else {
-			//dbClient.AddUser(usrName, usrEmail, usrPassword, usrSunsign)
-			fmt.Println("ADD USER TO ACCOUNT")
-			http.ServeFile(w, r, "./web/welcome.html")
-
+	http.HandleFunc("/main", func(w http.ResponseWriter, r *http.Request) {
+		var usrEmail = r.FormValue("inputEmail")
+		var usrPassword = r.FormValue("inputPassword")
+		fmt.Println(usrPassword)
+		if usrPassword == "" {
+			fmt.Println("yes")
 		}
-		fmt.Println(answer)
-
-	})
-
-	http.HandleFunc("/welcome", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println(r.URL.Path)
-		fmt.Println("test")
-		http.ServeFile(w, r, "./web/welcome.html")
-
-	})
-
-	http.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./web/index.html")
-	})
-
-	http.HandleFunc("/signupmvp", func(w http.ResponseWriter, r *http.Request) {
-		var usrSunsign = r.FormValue("mySunsign")
-		var usrName = r.FormValue("myName")
-		var usrEmail = r.FormValue("myEmail")
-		var usrPassword = r.FormValue("myPassword")
+		fmt.Println(usrEmail)
 		dbEmail := dbClient.FindEmail(usrEmail)
-
-		if dbEmail == usrEmail {
-			http.ServeFile(w, r, "./web/reject.html")
-		} else {
-			dbClient.AddUser(usrName, usrEmail, usrPassword, usrSunsign, 0, false)
-			reqHoroscope := gethoroscope.GetHoroscope(usrSunsign, "today")
-			fmt.Fprintf(w, reqHoroscope)
-		}
-	})
-
-	http.HandleFunc("/loginmvp", func(w http.ResponseWriter, r *http.Request) {
-		var usrEmail = r.FormValue("myEmail")
-		var usrPassword = r.FormValue("myPassword")
-		dbEmail := dbClient.FindEmail(usrEmail)
-
-		if dbEmail != "" {
-			isUser := dbClient.Auth(usrEmail, usrPassword)
-			usrStatus := dbClient.IsBlocked(usrEmail)
-			myUsr := dbClient.FindUsr(dbEmail)
-
-			if usrStatus {
-
-				yr, month, day := time.Now().Date()
-				myTime := string(yr) + string(month) + string(day)
-				fmt.Fprintf(w, "Too many failed password attempts. Due to security reasons, your account has been locked until tomorrow. Goodbye.")
-				log.Output(0, (myTime + ": " + usrEmail + " - too many failed password attempts"))
-			} else {
-				if isUser {
-					reqHoroscope := gethoroscope.GetHoroscope(myUsr[2], "today")
-					fmt.Fprintf(w, reqHoroscope)
-				} else {
-					dbClient.FailedAttempt(dbEmail)
-					if dbClient.IsBlocked(usrEmail) {
-						yr, month, day := time.Now().Date()
-						myTime := string(yr) + string(month) + string(day)
-						fmt.Fprintf(w, "Too many failed password attempts. Due to security reasons, your account has been locked until tomorrow. Goodbye.")
-						log.Output(0, (myTime + ": " + usrEmail + " - too many failed password attempts"))
-					} else {
-						http.ServeFile(w, r, "./web/index.html")
-					}
-				}
+		isUsr := dbClient.Auth(usrEmail, usrPassword)
+		isBlocked := !(dbClient.IsBlocked(usrEmail))
+		fmt.Println(dbEmail)
+		if (dbEmail == usrEmail) && isUsr && isBlocked {
+			w.Header().Set("Content-Type", "text/html")
+			data := MainContent{
+				Daily:   gethoroscope.GetHoroscope("aquarius", "today"),
+				Monthly: gethoroscope.GetHoroscope("aquarius", "month"),
+				Yearly:  gethoroscope.GetHoroscope("aquarius", "year"),
+				Zodaic:  "leo",
+				UsrName: "Dania",
 			}
-
+			mtmpl.Execute(w, data)
+		} else if !(isBlocked) {
+			http.ServeFile(w, r, "./web/locked.html")
 		} else {
-			http.ServeFile(w, r, "./web/account.html")
+			http.ServeFile(w, r, "./web/index.html")
 		}
-
 	})
 
 	err := http.ListenAndServe(":8081", nil)
