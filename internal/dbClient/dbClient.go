@@ -2,8 +2,8 @@ package dbClient
 
 import (
 	"log"
+	"fmt"
 	"strconv"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"golang.org/x/crypto/bcrypt"
@@ -37,6 +37,22 @@ func AddUser(userName string, usrEmail string, usrPassword string, usrSunsign st
 
 }
 
+// func DeleteUsr(usrEmail string){
+// 	db, err := gorm.Open("sqlite3", "myDB.db")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	fmt.Println(usrEmail)
+// 	defer db.Close()
+// 	db.AutoMigrate(&UsrLogin{})
+// 	var currUsr UsrLogin
+
+// 	db.Find(&currUsr, "email = ?", usrEmail)
+// 	fmt.Println("CURRUSR", currUsr)
+// 	db.Delete(currUsr)
+
+// }
+
 //FindEmail checks if given email is on out database
 func FindEmail(userEmail string) string {
 	db, err := gorm.Open("sqlite3", "myDB.db")
@@ -53,15 +69,22 @@ func FindEmail(userEmail string) string {
 
 //Auth checks if given password matches hashed password on database
 func Auth(userEmail string, pw string) bool {
+
 	db, err := gorm.Open("sqlite3", "myDB.db")
 	defer db.Close()
 
 	if err != nil {
 		log.Fatal(err)
 	}
+	if len(userEmail) < 1{
+		return false
+	}
 
 	var currUsr UsrLogin
 	db.Find(&currUsr, "email = ?", userEmail)
+	// db.Where("email = ?", userEmail).Find(&currUsr)
+	fmt.Println("MAIl", userEmail)
+	fmt.Println("HIII", currUsr.Name, currUsr.Password, currUsr.Sunsign, string(currUsr.Login), strconv.FormatBool(currUsr.Blocked))
 	hash := currUsr.Password
 	answer := IsPassword([]byte(hash), pw)
 	return answer

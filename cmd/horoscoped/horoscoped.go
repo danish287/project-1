@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"html/template"
-	"log"
+	// "log"
 	"net/http"
-	"os"
-	"time"
-
+	// "os"
+	// "time"
+	"strings"
+	// "syscall"
+	// "os/signal"
 	"github.com/danish287/project-1/internal/dbClient"
 	"github.com/danish287/project-1/internal/gethoroscope"
 )
@@ -20,67 +22,100 @@ type MainContent struct {
 	UsrName string
 }
 
-type Welcome struct {
-	MyName string
-}
-
 func main() {
-	println("Server is running on port 8081")
 
-	// logging anything that happens in this file
-	currTime := time.Now()
-	path := "logs/horoscoped/" + currTime.Format("01-02-2006") + ".log"
-	file, _ := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
-	defer file.Close()
-	log.SetOutput(file)
-
-	mtmpl := template.Must(template.ParseFiles("web/main.html"))
-
+	mtmpl := template.Must(template.ParseFiles("templates/main.html"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "web/index.html")
+		http.ServeFile(w, r, "templates/index.html")
 	})
 
 	http.HandleFunc("/signup", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "web/signup.html")
+		http.ServeFile(w, r, "templates/signup.html")
+		
 	})
 
-	http.HandleFunc("/locked", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "web/locked.html")
-	})
+	http.HandleFunc("/newuser", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("we are here")
+		fmt.Println(r.FormValue("mySunsign"))
+		fmt.Println(r.FormValue("inputEmail"))
 
-	http.HandleFunc("/main", func(w http.ResponseWriter, r *http.Request) {
-		var usrEmail = r.FormValue("inputEmail")
-		var usrPassword = r.FormValue("inputPassword")
-		fmt.Println(usrPassword)
-		if usrPassword == "" {
-			fmt.Println("yes")
-		}
-		fmt.Println(usrEmail)
-		dbEmail := dbClient.FindEmail(usrEmail)
-		isUsr := dbClient.Auth(usrEmail, usrPassword)
-		isBlocked := !(dbClient.IsBlocked(usrEmail))
-		fmt.Println(dbEmail)
-		if (dbEmail == usrEmail) && isUsr && isBlocked {
+		if len(dbClient.FindEmail(r.FormValue("inputEmail"))) > 0 {
+			http.Redirect(w,r, "/", http.StatusSeeOther)	
+		} else{ 
+			dbClient.AddUser(r.FormValue("inputName"), r.FormValue("inputEmail"), r.FormValue("inputPassword"), r.FormValue("mySunsign"), 0, false)
 			w.Header().Set("Content-Type", "text/html")
 			data := MainContent{
-				Daily:   gethoroscope.GetHoroscope("aquarius", "today"),
-				Monthly: gethoroscope.GetHoroscope("aquarius", "month"),
-				Yearly:  gethoroscope.GetHoroscope("aquarius", "year"),
-				Zodaic:  "leo",
-				UsrName: "Dania",
+				Daily:   gethoroscope.GetHoroscope(r.FormValue("mySunsign"), "today"),
+				Monthly: gethoroscope.GetHoroscope(r.FormValue("mySunsign"), "month"),
+				Yearly:  gethoroscope.GetHoroscope(r.FormValue("mySunsign"), "year"),
+				Zodaic:  r.FormValue("mySunsign"),
+				UsrName: strings.Title(r.FormValue("inputName")),
 			}
-			mtmpl.Execute(w, data)
-		} else if !(isBlocked) {
-			http.ServeFile(w, r, "./web/locked.html")
-		} else {
-			http.ServeFile(w, r, "./web/index.html")
+			err := mtmpl.Execute(w, data)
+			if err != nil {
+				fmt.Println(err)
+		}
+
 		}
 	})
 
-	err := http.ListenAndServe(":8081", nil)
+	http.HandleFunc("/welcome", func(w http.ResponseWriter, r *http.Request) {
+		usrEmail:= r.FormValue("inputEmail")
+		usrPassword := r.FormValue("inputPassword")
+		fmt.Println(usrEmail, usrPassword)
+		fmt.Println(dbClient.Auth(usrEmail, usrPassword))
+		fmt.Println("BLOCKED", !(dbClient.IsBlocked(usrEmail)))
+		if !(dbClient.IsBlocked(usrEmail)) && dbClient.Auth(usrEmail, usrPassword){
 
-	if err != nil {
-		log.Fatal(err)
+			usrData := dbClient.FindUsr(usrEmail)
+			w.Header().Set("Content-Type", "text/html")
+			data := MainContent{
+				Daily:   gethoroscope.GetHoroscope(usrData[2], "today"),
+				Monthly: gethoroscope.GetHoroscope(usrData[2], "month"),
+				Yearly:  gethoroscope.GetHoroscope(usrData[2], "year"),
+				Zodaic:  usrData[2],
+				UsrName: strings.Title(usrData[0]),
+			}
+			err := mtmpl.Execute(w, data)
+			if err != nil {
+					fmt.Println(err)
+			}
+			} else{
+			dbClient.FailedAttempt(usrEmail) 
+			http.Redirect(w,r, "/", http.StatusSeeOther)
+		}
+	})
+
+
+
+	fmt.Println("Server is running on port 8081...")	
+	err := http.ListenAndServe(":8081", nil)
+	if err != nil{
+		fmt.Println(err)
 	}
+
+
+	// terminate := make(chan error, 2)
+	// interrupt := make(chan os.Signal, 1)
+	// signal.Notify(interrupt, syscall.SIGINT)
+
+	// go func() {
+	// 	terminate <- http.ListenAndServe(":8080", nil)
+	// }()
+
+	// fmt.Println("Server is running on port 8081...")
+
+	// for {
+	// 	err := <-terminate
+	// 	newSignal := <-interrupt
+	// 	if (err != nil) || (newSignal != nil) {
+	// 		fmt.Println("\nClosing application: ", newSignal)
+	// 		os.Exit(0)
+
+	// 	}
+
+	// }
+
+
 
 }
