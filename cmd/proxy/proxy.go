@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"os"
-	"time"
+	// "os"
+	// "time"
 )
 
 func main() {
@@ -15,12 +15,11 @@ func main() {
 }
 
 func runProxy() {
-
-	currTime := time.Now()
-	path := "logs/proxy/" + currTime.Format("01-02-2006") + ".log"
-	file, _ := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
-	defer file.Close()
-	log.SetOutput(file)
+	// currTime := time.Now()
+	// path := "logs/proxy/" + currTime.Format("01-02-2006") + ".log"
+	// file, _ := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	// defer file.Close()
+	// log.SetOutput(file)
 
 	//parse the url
 	myURL, err := url.Parse("http://localhost:8081")
@@ -36,6 +35,7 @@ func runProxy() {
 	//listen on given ports
 	err = http.ListenAndServeTLS(":443", "cert.pem", "key.pem", proxy)
 	if err != nil {
+		fmt.Println(err)
 		log.Fatal(err)
 	}
 

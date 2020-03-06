@@ -3,17 +3,13 @@ package main
 import (
 	"fmt"
 	"html/template"
-	// "log"
 	"net/http"
-	// "os"
-	// "time"
 	"strings"
-	// "syscall"
-	// "os/signal"
 	"github.com/danish287/project-1/internal/dbClient"
 	"github.com/danish287/project-1/internal/gethoroscope"
 )
 
+// MainContent stores
 type MainContent struct {
 	Daily   string
 	Monthly string
